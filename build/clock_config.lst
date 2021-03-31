@@ -1,0 +1,332 @@
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"clock_config.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.delay_us,"ax",%progbits
+  16              		.align	1
+  17              		.global	delay_us
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	delay_us:
+  25              	.LVL0:
+  26              	.LFB29:
+  27              		.file 1 "USER/src/clock_config.c"
+   1:USER/src/clock_config.c **** /*******************************************************************************
+   2:USER/src/clock_config.c ****  * Func:	clock_config.c
+   3:USER/src/clock_config.c ****  * Describle: thiese functions are used to configure the SYStick,
+   4:USER/src/clock_config.c ****  * 			for the function of delay.  
+   5:USER/src/clock_config.c ****  * Created on: 2021年3月2日
+   6:USER/src/clock_config.c ****  * Author: kaysen
+   7:USER/src/clock_config.c **** *******************************************************************************/
+   8:USER/src/clock_config.c **** #include "clock_config.h"
+   9:USER/src/clock_config.c **** 
+  10:USER/src/clock_config.c **** 
+  11:USER/src/clock_config.c **** /*******************************************************************************
+  12:USER/src/clock_config.c ****  * @函 数 名         : delay_us
+  13:USER/src/clock_config.c ****  * @函数功能		   : us延时，
+  14:USER/src/clock_config.c ****  * @输    入         : nus：要延时的us数
+  15:USER/src/clock_config.c ****  *					注意:nus的值,不要大于798915us(最大值即2^24/fac_us@fac_us=21)
+  16:USER/src/clock_config.c ****  * @输    出         : 无
+  17:USER/src/clock_config.c ****  *******************************************************************************/
+  18:USER/src/clock_config.c **** void delay_us(uint32_t us) 
+  19:USER/src/clock_config.c **** {
+  28              		.loc 1 19 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  20:USER/src/clock_config.c **** 	uint32_t temp;
+  33              		.loc 1 20 2 view .LVU1
+  21:USER/src/clock_config.c **** 	SysTick->LOAD = SystemCoreClock/8/ULTS*us; 		//时间加载,YSTICK的时钟固定为AHB时钟的1/8
+  34              		.loc 1 21 2 view .LVU2
+  35              		.loc 1 21 35 is_stmt 0 view .LVU3
+  36 0000 0D4B     		ldr	r3, .L3
+  37 0002 1B68     		ldr	r3, [r3]
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s 			page 2
+
+
+  38 0004 0D4A     		ldr	r2, .L3+4
+  39 0006 A2FB0323 		umull	r2, r3, r2, r3
+  40 000a 5B0D     		lsrs	r3, r3, #21
+  41              		.loc 1 21 40 view .LVU4
+  42 000c 00FB03F3 		mul	r3, r0, r3
+  43              		.loc 1 21 16 view .LVU5
+  44 0010 4FF0E022 		mov	r2, #-536813568
+  45 0014 5361     		str	r3, [r2, #20]
+  22:USER/src/clock_config.c **** 	SysTick->VAL = 0x00;        					//清空计数器
+  46              		.loc 1 22 2 is_stmt 1 view .LVU6
+  47              		.loc 1 22 15 is_stmt 0 view .LVU7
+  48 0016 0023     		movs	r3, #0
+  49 0018 9361     		str	r3, [r2, #24]
+  23:USER/src/clock_config.c **** 	SysTick->CTRL = 0x01;							//开始倒数
+  50              		.loc 1 23 2 is_stmt 1 view .LVU8
+  51              		.loc 1 23 16 is_stmt 0 view .LVU9
+  52 001a 0123     		movs	r3, #1
+  53 001c 1361     		str	r3, [r2, #16]
+  54              	.L2:
+  24:USER/src/clock_config.c **** 	do 
+  55              		.loc 1 24 2 is_stmt 1 discriminator 1 view .LVU10
+  25:USER/src/clock_config.c **** 	{
+  26:USER/src/clock_config.c **** 		temp = SysTick->CTRL;
+  56              		.loc 1 26 3 discriminator 1 view .LVU11
+  57              		.loc 1 26 8 is_stmt 0 discriminator 1 view .LVU12
+  58 001e 4FF0E023 		mov	r3, #-536813568
+  59 0022 1B69     		ldr	r3, [r3, #16]
+  60              	.LVL1:
+  27:USER/src/clock_config.c **** 	} while ((temp & 0x01) && !(temp & (1 << 16)));		//等待时间到达
+  61              		.loc 1 27 10 is_stmt 1 discriminator 1 view .LVU13
+  62              		.loc 1 27 25 is_stmt 0 discriminator 1 view .LVU14
+  63 0024 03F00113 		and	r3, r3, #65537
+  64              	.LVL2:
+  65              		.loc 1 27 2 discriminator 1 view .LVU15
+  66 0028 012B     		cmp	r3, #1
+  67 002a F8D0     		beq	.L2
+  28:USER/src/clock_config.c **** 	SysTick->CTRL = 0X00;								//关闭计数器
+  68              		.loc 1 28 2 is_stmt 1 view .LVU16
+  69              		.loc 1 28 16 is_stmt 0 view .LVU17
+  70 002c 4FF0E023 		mov	r3, #-536813568
+  71 0030 0022     		movs	r2, #0
+  72 0032 1A61     		str	r2, [r3, #16]
+  29:USER/src/clock_config.c **** 	SysTick->VAL = 0X00;      					 		//清空计数器
+  73              		.loc 1 29 2 is_stmt 1 view .LVU18
+  74              		.loc 1 29 15 is_stmt 0 view .LVU19
+  75 0034 9A61     		str	r2, [r3, #24]
+  30:USER/src/clock_config.c **** }
+  76              		.loc 1 30 1 view .LVU20
+  77 0036 7047     		bx	lr
+  78              	.L4:
+  79              		.align	2
+  80              	.L3:
+  81 0038 00000000 		.word	SystemCoreClock
+  82 003c 83DE1B43 		.word	1125899907
+  83              		.cfi_endproc
+  84              	.LFE29:
+  86              		.section	.text.delay_ms,"ax",%progbits
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s 			page 3
+
+
+  87              		.align	1
+  88              		.global	delay_ms
+  89              		.syntax unified
+  90              		.thumb
+  91              		.thumb_func
+  92              		.fpu softvfp
+  94              	delay_ms:
+  95              	.LVL3:
+  96              	.LFB30:
+  31:USER/src/clock_config.c ****  
+  32:USER/src/clock_config.c **** /*******************************************************************************
+  33:USER/src/clock_config.c ****  * 函 数 名         : delay_ms
+  34:USER/src/clock_config.c ****  * 函数功能		   : ms延时，
+  35:USER/src/clock_config.c ****  * 输    入         : nms：要延时的ms数
+  36:USER/src/clock_config.c ****  *					注意:nms的值,SysTick->LOAD为24位寄存器，
+  37:USER/src/clock_config.c ****  *					不要大于0xffffff*8*1000/SYSCLK
+  38:USER/src/clock_config.c ****  *					对72M条件下,nms<=1864ms
+  39:USER/src/clock_config.c ****  * 输    出         : 无
+  40:USER/src/clock_config.c ****  *******************************************************************************/
+  41:USER/src/clock_config.c **** void delay_ms(uint16_t ms) 
+  42:USER/src/clock_config.c **** {
+  97              		.loc 1 42 1 is_stmt 1 view -0
+  98              		.cfi_startproc
+  99              		@ args = 0, pretend = 0, frame = 0
+ 100              		@ frame_needed = 0, uses_anonymous_args = 0
+ 101              		@ link register save eliminated.
+  43:USER/src/clock_config.c **** 	u32 temp;
+ 102              		.loc 1 43 2 view .LVU22
+  44:USER/src/clock_config.c **** 	SysTick->LOAD = (uint32_t)SystemCoreClock/8/MILLIS*ms;			//时间加载(SysTick->LOAD为24bit)
+ 103              		.loc 1 44 2 view .LVU23
+ 104              		.loc 1 44 18 is_stmt 0 view .LVU24
+ 105 0000 0D4B     		ldr	r3, .L7
+ 106 0002 1B68     		ldr	r3, [r3]
+ 107              		.loc 1 44 45 view .LVU25
+ 108 0004 0D4A     		ldr	r2, .L7+4
+ 109 0006 A2FB0323 		umull	r2, r3, r2, r3
+ 110 000a 5B0A     		lsrs	r3, r3, #9
+ 111              		.loc 1 44 52 view .LVU26
+ 112 000c 00FB03F3 		mul	r3, r0, r3
+ 113              		.loc 1 44 16 view .LVU27
+ 114 0010 4FF0E022 		mov	r2, #-536813568
+ 115 0014 5361     		str	r3, [r2, #20]
+  45:USER/src/clock_config.c **** 	//SysTick->LOAD = (uint32_t)9000000/MILLIS*ms;
+  46:USER/src/clock_config.c **** 	SysTick->VAL = 0x00;											//清空计数器
+ 116              		.loc 1 46 2 is_stmt 1 view .LVU28
+ 117              		.loc 1 46 15 is_stmt 0 view .LVU29
+ 118 0016 0023     		movs	r3, #0
+ 119 0018 9361     		str	r3, [r2, #24]
+  47:USER/src/clock_config.c **** 	SysTick->CTRL = 0x01;											//开始倒数
+ 120              		.loc 1 47 2 is_stmt 1 view .LVU30
+ 121              		.loc 1 47 16 is_stmt 0 view .LVU31
+ 122 001a 0123     		movs	r3, #1
+ 123 001c 1361     		str	r3, [r2, #16]
+ 124              	.L6:
+  48:USER/src/clock_config.c **** 	do 
+ 125              		.loc 1 48 2 is_stmt 1 discriminator 1 view .LVU32
+  49:USER/src/clock_config.c **** 	{
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s 			page 4
+
+
+  50:USER/src/clock_config.c **** 		temp = SysTick->CTRL;
+ 126              		.loc 1 50 3 discriminator 1 view .LVU33
+ 127              		.loc 1 50 8 is_stmt 0 discriminator 1 view .LVU34
+ 128 001e 4FF0E023 		mov	r3, #-536813568
+ 129 0022 1B69     		ldr	r3, [r3, #16]
+ 130              	.LVL4:
+  51:USER/src/clock_config.c **** 	} while ((temp & 0x01) && !(temp & (1 << 16)));					//等待时间到达
+ 131              		.loc 1 51 10 is_stmt 1 discriminator 1 view .LVU35
+ 132              		.loc 1 51 25 is_stmt 0 discriminator 1 view .LVU36
+ 133 0024 03F00113 		and	r3, r3, #65537
+ 134              	.LVL5:
+ 135              		.loc 1 51 2 discriminator 1 view .LVU37
+ 136 0028 012B     		cmp	r3, #1
+ 137 002a F8D0     		beq	.L6
+  52:USER/src/clock_config.c **** 	SysTick->CTRL = 0X00;											//关闭计数器
+ 138              		.loc 1 52 2 is_stmt 1 view .LVU38
+ 139              		.loc 1 52 16 is_stmt 0 view .LVU39
+ 140 002c 4FF0E023 		mov	r3, #-536813568
+ 141 0030 0022     		movs	r2, #0
+ 142 0032 1A61     		str	r2, [r3, #16]
+  53:USER/src/clock_config.c **** 	SysTick->VAL = 0X00;      					 					//清空计数器 
+ 143              		.loc 1 53 2 is_stmt 1 view .LVU40
+ 144              		.loc 1 53 15 is_stmt 0 view .LVU41
+ 145 0034 9A61     		str	r2, [r3, #24]
+  54:USER/src/clock_config.c **** }
+ 146              		.loc 1 54 1 view .LVU42
+ 147 0036 7047     		bx	lr
+ 148              	.L8:
+ 149              		.align	2
+ 150              	.L7:
+ 151 0038 00000000 		.word	SystemCoreClock
+ 152 003c D34D6210 		.word	274877907
+ 153              		.cfi_endproc
+ 154              	.LFE30:
+ 156              		.section	.text.delay_s,"ax",%progbits
+ 157              		.align	1
+ 158              		.global	delay_s
+ 159              		.syntax unified
+ 160              		.thumb
+ 161              		.thumb_func
+ 162              		.fpu softvfp
+ 164              	delay_s:
+ 165              	.LVL6:
+ 166              	.LFB31:
+  55:USER/src/clock_config.c **** 
+  56:USER/src/clock_config.c **** void delay_s(uint8_t s) 
+  57:USER/src/clock_config.c **** {
+ 167              		.loc 1 57 1 is_stmt 1 view -0
+ 168              		.cfi_startproc
+ 169              		@ args = 0, pretend = 0, frame = 0
+ 170              		@ frame_needed = 0, uses_anonymous_args = 0
+ 171              		@ link register save eliminated.
+  58:USER/src/clock_config.c **** 	u32 temp;
+ 172              		.loc 1 58 2 view .LVU44
+  59:USER/src/clock_config.c **** 	SysTick->LOAD = (u32)SystemCoreClock/8/SECOND*s;				//时间加载(SysTick->LOAD为24bit)
+ 173              		.loc 1 59 2 view .LVU45
+ 174              		.loc 1 59 18 is_stmt 0 view .LVU46
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s 			page 5
+
+
+ 175 0000 0E4B     		ldr	r3, .L11
+ 176 0002 1B68     		ldr	r3, [r3]
+ 177              		.loc 1 59 40 view .LVU47
+ 178 0004 DB08     		lsrs	r3, r3, #3
+ 179              		.loc 1 59 47 view .LVU48
+ 180 0006 03FB00F0 		mul	r0, r3, r0
+ 181              	.LVL7:
+ 182              		.loc 1 59 16 view .LVU49
+ 183 000a 4FF0E023 		mov	r3, #-536813568
+ 184 000e 5861     		str	r0, [r3, #20]
+  60:USER/src/clock_config.c **** 	SysTick->VAL = 0x00;											//清空计数器
+ 185              		.loc 1 60 2 is_stmt 1 view .LVU50
+ 186              		.loc 1 60 15 is_stmt 0 view .LVU51
+ 187 0010 0022     		movs	r2, #0
+ 188 0012 9A61     		str	r2, [r3, #24]
+  61:USER/src/clock_config.c **** 	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;						//开始倒数
+ 189              		.loc 1 61 2 is_stmt 1 view .LVU52
+ 190              		.loc 1 61 16 is_stmt 0 view .LVU53
+ 191 0014 1A69     		ldr	r2, [r3, #16]
+ 192 0016 42F00102 		orr	r2, r2, #1
+ 193 001a 1A61     		str	r2, [r3, #16]
+  62:USER/src/clock_config.c **** 	SysTick->CTRL = 0x01;											//开始倒数
+ 194              		.loc 1 62 2 is_stmt 1 view .LVU54
+ 195              		.loc 1 62 16 is_stmt 0 view .LVU55
+ 196 001c 0122     		movs	r2, #1
+ 197 001e 1A61     		str	r2, [r3, #16]
+ 198              	.L10:
+  63:USER/src/clock_config.c **** 	do {
+ 199              		.loc 1 63 2 is_stmt 1 discriminator 1 view .LVU56
+  64:USER/src/clock_config.c **** 		temp = SysTick->CTRL;
+ 200              		.loc 1 64 3 discriminator 1 view .LVU57
+ 201              		.loc 1 64 8 is_stmt 0 discriminator 1 view .LVU58
+ 202 0020 4FF0E023 		mov	r3, #-536813568
+ 203 0024 1B69     		ldr	r3, [r3, #16]
+ 204              	.LVL8:
+  65:USER/src/clock_config.c **** 	} while ((temp & 0x01) && !(temp & (1 << 16)));					//等待时间到达
+ 205              		.loc 1 65 10 is_stmt 1 discriminator 1 view .LVU59
+ 206              		.loc 1 65 25 is_stmt 0 discriminator 1 view .LVU60
+ 207 0026 03F00113 		and	r3, r3, #65537
+ 208              	.LVL9:
+ 209              		.loc 1 65 2 discriminator 1 view .LVU61
+ 210 002a 012B     		cmp	r3, #1
+ 211 002c F8D0     		beq	.L10
+  66:USER/src/clock_config.c **** 	SysTick->CTRL = 0X00;											//关闭计数器
+ 212              		.loc 1 66 2 is_stmt 1 view .LVU62
+ 213              		.loc 1 66 16 is_stmt 0 view .LVU63
+ 214 002e 4FF0E023 		mov	r3, #-536813568
+ 215 0032 0022     		movs	r2, #0
+ 216 0034 1A61     		str	r2, [r3, #16]
+  67:USER/src/clock_config.c **** 	SysTick->VAL = 0X00;      					 					//清空计数器  
+ 217              		.loc 1 67 2 is_stmt 1 view .LVU64
+ 218              		.loc 1 67 15 is_stmt 0 view .LVU65
+ 219 0036 9A61     		str	r2, [r3, #24]
+  68:USER/src/clock_config.c **** }
+ 220              		.loc 1 68 1 view .LVU66
+ 221 0038 7047     		bx	lr
+ 222              	.L12:
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s 			page 6
+
+
+ 223 003a 00BF     		.align	2
+ 224              	.L11:
+ 225 003c 00000000 		.word	SystemCoreClock
+ 226              		.cfi_endproc
+ 227              	.LFE31:
+ 229              		.text
+ 230              	.Letext0:
+ 231              		.file 2 "c:\\gnu arm embedded toolchain\\10 2020-q4-major\\arm-none-eabi\\include\\machine\\_defau
+ 232              		.file 3 "c:\\gnu arm embedded toolchain\\10 2020-q4-major\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 233              		.file 4 "CMSIS/CoreSupport/core_cm3.h"
+ 234              		.file 5 "CMSIS/DeviceSupport/system_stm32f10x.h"
+ 235              		.file 6 "CMSIS/DeviceSupport/stm32f10x.h"
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 clock_config.c
+C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s:16     .text.delay_us:00000000 $t
+C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s:24     .text.delay_us:00000000 delay_us
+C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s:81     .text.delay_us:00000038 $d
+C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s:87     .text.delay_ms:00000000 $t
+C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s:94     .text.delay_ms:00000000 delay_ms
+C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s:151    .text.delay_ms:00000038 $d
+C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s:157    .text.delay_s:00000000 $t
+C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s:164    .text.delay_s:00000000 delay_s
+C:\Users\Anoolv\AppData\Local\Temp\ccDBk0Xg.s:225    .text.delay_s:0000003c $d
+
+UNDEFINED SYMBOLS
+SystemCoreClock

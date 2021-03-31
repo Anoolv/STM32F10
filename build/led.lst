@@ -1,0 +1,369 @@
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccYCCJRe.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"led.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.LED_Init,"ax",%progbits
+  16              		.align	1
+  17              		.global	LED_Init
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	LED_Init:
+  25              	.LFB29:
+  26              		.file 1 "USER/src/led.c"
+   1:USER/src/led.c **** #include "led.h"
+   2:USER/src/led.c **** 
+   3:USER/src/led.c **** 
+   4:USER/src/led.c **** 
+   5:USER/src/led.c **** /***
+   6:USER/src/led.c **** *@function: this function is used to initial the LED hardware,
+   7:USER/src/led.c **** *		   like GPIO Clock  Registersand so on.
+   8:USER/src/led.c **** *
+   9:USER/src/led.c **** ***/
+  10:USER/src/led.c **** #ifdef RGT_OPT_FLAG				//是否定义了寄存器操作标志位
+  11:USER/src/led.c **** void LED_Init(void)
+  12:USER/src/led.c **** {
+  13:USER/src/led.c **** 	RCC->APB2ENR |= RCC_APB2ENR_IOPAEN | RCC_APB2ENR_IOPDEN ;
+  14:USER/src/led.c **** 
+  15:USER/src/led.c **** 	GPIOA->CRH &= ~(GPIO_CRH_CNF8 | GPIO_CRH_MODE8) ;
+  16:USER/src/led.c **** 	GPIOD->CRL &= ~(GPIO_CRL_CNF2 | GPIO_CRL_MODE2) ;
+  17:USER/src/led.c **** 
+  18:USER/src/led.c **** 	GPIOA->CRH |= (GPIO_CRH_MODE8) ;
+  19:USER/src/led.c **** 	GPIOD->CRL |= (GPIO_CRL_MODE2) ;
+  20:USER/src/led.c **** 
+  21:USER/src/led.c **** 	GPIOA->BSRR = LED1_PIN;
+  22:USER/src/led.c **** 	GPIOD->BSRR = LED2_PIN;
+  23:USER/src/led.c **** }
+  24:USER/src/led.c **** 
+  25:USER/src/led.c **** void Led_Ctl(LED_NUM num,BitAction status)
+  26:USER/src/led.c **** {
+  27:USER/src/led.c **** 	switch(num)
+  28:USER/src/led.c **** 	{
+  29:USER/src/led.c **** 		case LED_1:
+  30:USER/src/led.c **** 			if(status)
+  31:USER/src/led.c **** 				GPIOA->BSRR = LED1_PIN ;	
+  32:USER/src/led.c **** 			else 
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccYCCJRe.s 			page 2
+
+
+  33:USER/src/led.c **** 				GPIOA->BRR = LED1_PIN ;
+  34:USER/src/led.c **** 		break;
+  35:USER/src/led.c **** 
+  36:USER/src/led.c **** 		case LED_2:
+  37:USER/src/led.c **** 			if(status)
+  38:USER/src/led.c **** 				GPIOD->BSRR = LED2_PIN ;
+  39:USER/src/led.c **** 			else
+  40:USER/src/led.c **** 				GPIOD->BRR = LED2_PIN ; 
+  41:USER/src/led.c **** 		break;
+  42:USER/src/led.c **** 
+  43:USER/src/led.c **** 		default:
+  44:USER/src/led.c **** 			GPIOA->BSRR = LED1_PIN;
+  45:USER/src/led.c **** 			GPIOD->BSRR = LED2_PIN;
+  46:USER/src/led.c **** 		break;
+  47:USER/src/led.c **** 	}
+  48:USER/src/led.c **** }
+  49:USER/src/led.c **** 
+  50:USER/src/led.c **** #else
+  51:USER/src/led.c **** void LED_Init(void)
+  52:USER/src/led.c **** {
+  27              		.loc 1 52 1 view -0
+  28              		.cfi_startproc
+  29              		@ args = 0, pretend = 0, frame = 8
+  30              		@ frame_needed = 0, uses_anonymous_args = 0
+  31 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+  32              	.LCFI0:
+  33              		.cfi_def_cfa_offset 20
+  34              		.cfi_offset 4, -20
+  35              		.cfi_offset 5, -16
+  36              		.cfi_offset 6, -12
+  37              		.cfi_offset 7, -8
+  38              		.cfi_offset 14, -4
+  39 0002 83B0     		sub	sp, sp, #12
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_offset 32
+  53:USER/src/led.c **** 	GPIO_InitTypeDef LED_IO_Struct;					//define a struct variable of gpio for the 
+  42              		.loc 1 53 2 view .LVU1
+  54:USER/src/led.c **** 													//led needed,and use to "GPIO_Init()"
+  55:USER/src/led.c **** 	
+  56:USER/src/led.c **** 	RCC_APB2PeriphClockCmd(LED1_PORT_RCC,ENABLE);
+  43              		.loc 1 56 2 view .LVU2
+  44 0004 0121     		movs	r1, #1
+  45 0006 0420     		movs	r0, #4
+  46 0008 FFF7FEFF 		bl	RCC_APB2PeriphClockCmd
+  47              	.LVL0:
+  57:USER/src/led.c ****     RCC_APB2PeriphClockCmd(LED1_PORT_RCC,ENABLE);    //initial GPIO clock
+  48              		.loc 1 57 5 view .LVU3
+  49 000c 0121     		movs	r1, #1
+  50 000e 0420     		movs	r0, #4
+  51 0010 FFF7FEFF 		bl	RCC_APB2PeriphClockCmd
+  52              	.LVL1:
+  58:USER/src/led.c **** 	
+  59:USER/src/led.c **** 	LED_IO_Struct.GPIO_Pin = LED1_PIN;			//set the io which is used
+  53              		.loc 1 59 2 view .LVU4
+  54              		.loc 1 59 25 is_stmt 0 view .LVU5
+  55 0014 2024     		movs	r4, #32
+  56 0016 ADF80440 		strh	r4, [sp, #4]	@ movhi
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccYCCJRe.s 			page 3
+
+
+  60:USER/src/led.c **** 	LED_IO_Struct.GPIO_Mode = GPIO_Mode_Out_PP;		//set as Push-pull output mode
+  57              		.loc 1 60 2 is_stmt 1 view .LVU6
+  58              		.loc 1 60 26 is_stmt 0 view .LVU7
+  59 001a 1027     		movs	r7, #16
+  60 001c 8DF80770 		strb	r7, [sp, #7]
+  61:USER/src/led.c **** 	LED_IO_Struct.GPIO_Speed = GPIO_Speed_50MHz;	//set working speed as 50MHz
+  61              		.loc 1 61 2 is_stmt 1 view .LVU8
+  62              		.loc 1 61 27 is_stmt 0 view .LVU9
+  63 0020 0325     		movs	r5, #3
+  64 0022 8DF80650 		strb	r5, [sp, #6]
+  62:USER/src/led.c **** 	GPIO_Init(LED1_PORT,&LED_IO_Struct);
+  65              		.loc 1 62 2 is_stmt 1 view .LVU10
+  66 0026 0D4E     		ldr	r6, .L3
+  67 0028 01A9     		add	r1, sp, #4
+  68 002a 3046     		mov	r0, r6
+  69 002c FFF7FEFF 		bl	GPIO_Init
+  70              	.LVL2:
+  63:USER/src/led.c **** 
+  64:USER/src/led.c **** 	LED_IO_Struct.GPIO_Pin = LED2_PIN;			//set the io which is used
+  71              		.loc 1 64 2 view .LVU11
+  72              		.loc 1 64 25 is_stmt 0 view .LVU12
+  73 0030 ADF80440 		strh	r4, [sp, #4]	@ movhi
+  65:USER/src/led.c **** 	LED_IO_Struct.GPIO_Mode = GPIO_Mode_Out_PP;		//set as Push-pull output mode
+  74              		.loc 1 65 2 is_stmt 1 view .LVU13
+  75              		.loc 1 65 26 is_stmt 0 view .LVU14
+  76 0034 8DF80770 		strb	r7, [sp, #7]
+  66:USER/src/led.c **** 	LED_IO_Struct.GPIO_Speed = GPIO_Speed_50MHz;	//set working speed as 50MHz
+  77              		.loc 1 66 2 is_stmt 1 view .LVU15
+  78              		.loc 1 66 27 is_stmt 0 view .LVU16
+  79 0038 8DF80650 		strb	r5, [sp, #6]
+  67:USER/src/led.c ****     GPIO_Init(LED2_PORT ,&LED_IO_Struct);                        //initial GPIO registers
+  80              		.loc 1 67 5 is_stmt 1 view .LVU17
+  81 003c 084D     		ldr	r5, .L3+4
+  82 003e 01A9     		add	r1, sp, #4
+  83 0040 2846     		mov	r0, r5
+  84 0042 FFF7FEFF 		bl	GPIO_Init
+  85              	.LVL3:
+  68:USER/src/led.c **** 
+  69:USER/src/led.c ****     GPIO_SetBits(LED1_PORT ,LED1_PIN);    
+  86              		.loc 1 69 5 view .LVU18
+  87 0046 2146     		mov	r1, r4
+  88 0048 3046     		mov	r0, r6
+  89 004a FFF7FEFF 		bl	GPIO_SetBits
+  90              	.LVL4:
+  70:USER/src/led.c ****     GPIO_SetBits(LED2_PORT ,LED2_PIN);                         //reset GPIO level status
+  91              		.loc 1 70 5 view .LVU19
+  92 004e 2146     		mov	r1, r4
+  93 0050 2846     		mov	r0, r5
+  94 0052 FFF7FEFF 		bl	GPIO_SetBits
+  95              	.LVL5:
+  71:USER/src/led.c **** 
+  72:USER/src/led.c **** }
+  96              		.loc 1 72 1 is_stmt 0 view .LVU20
+  97 0056 03B0     		add	sp, sp, #12
+  98              	.LCFI2:
+  99              		.cfi_def_cfa_offset 20
+ 100              		@ sp needed
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccYCCJRe.s 			page 4
+
+
+ 101 0058 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 102              	.L4:
+ 103 005a 00BF     		.align	2
+ 104              	.L3:
+ 105 005c 000C0140 		.word	1073810432
+ 106 0060 00180140 		.word	1073813504
+ 107              		.cfi_endproc
+ 108              	.LFE29:
+ 110              		.section	.text.Led_Ctl,"ax",%progbits
+ 111              		.align	1
+ 112              		.global	Led_Ctl
+ 113              		.syntax unified
+ 114              		.thumb
+ 115              		.thumb_func
+ 116              		.fpu softvfp
+ 118              	Led_Ctl:
+ 119              	.LVL6:
+ 120              	.LFB30:
+  73:USER/src/led.c **** /***
+  74:USER/src/led.c **** *function: control LED working status
+  75:USER/src/led.c **** *
+  76:USER/src/led.c **** ***/
+  77:USER/src/led.c **** void Led_Ctl(LED_NUM num,BitAction status)
+  78:USER/src/led.c **** {
+ 121              		.loc 1 78 1 is_stmt 1 view -0
+ 122              		.cfi_startproc
+ 123              		@ args = 0, pretend = 0, frame = 0
+ 124              		@ frame_needed = 0, uses_anonymous_args = 0
+ 125              		.loc 1 78 1 is_stmt 0 view .LVU22
+ 126 0000 08B5     		push	{r3, lr}
+ 127              	.LCFI3:
+ 128              		.cfi_def_cfa_offset 8
+ 129              		.cfi_offset 3, -8
+ 130              		.cfi_offset 14, -4
+  79:USER/src/led.c **** 	switch(num)
+ 131              		.loc 1 79 2 is_stmt 1 view .LVU23
+ 132 0002 50B1     		cbz	r0, .L6
+ 133 0004 0128     		cmp	r0, #1
+ 134 0006 13D0     		beq	.L7
+  80:USER/src/led.c **** 	{
+  81:USER/src/led.c **** 		case LED_1:
+  82:USER/src/led.c **** 			if(status)
+  83:USER/src/led.c **** 				GPIO_SetBits(LED1_PORT,LED1_PIN);
+  84:USER/src/led.c **** 			else 
+  85:USER/src/led.c **** 				GPIO_ResetBits(LED1_PORT,LED1_PIN);
+  86:USER/src/led.c **** 		break;
+  87:USER/src/led.c **** 
+  88:USER/src/led.c **** 		case LED_2:
+  89:USER/src/led.c **** 			if(status)
+  90:USER/src/led.c **** 				GPIO_SetBits(LED2_PORT,LED2_PIN);
+  91:USER/src/led.c **** 			else
+  92:USER/src/led.c **** 				GPIO_ResetBits(LED2_PORT,LED2_PIN);
+  93:USER/src/led.c **** 		break;
+  94:USER/src/led.c **** 
+  95:USER/src/led.c **** 		default:
+  96:USER/src/led.c **** 			GPIO_ResetBits(LED1_PORT ,LED1_PIN);
+ 135              		.loc 1 96 4 view .LVU24
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccYCCJRe.s 			page 5
+
+
+ 136 0008 2021     		movs	r1, #32
+ 137              	.LVL7:
+ 138              		.loc 1 96 4 is_stmt 0 view .LVU25
+ 139 000a 0F48     		ldr	r0, .L14
+ 140              	.LVL8:
+ 141              		.loc 1 96 4 view .LVU26
+ 142 000c FFF7FEFF 		bl	GPIO_ResetBits
+ 143              	.LVL9:
+  97:USER/src/led.c **** 			GPIO_ResetBits(LED2_PORT ,LED2_PIN);
+ 144              		.loc 1 97 4 is_stmt 1 view .LVU27
+ 145 0010 2021     		movs	r1, #32
+ 146 0012 0E48     		ldr	r0, .L14+4
+ 147 0014 FFF7FEFF 		bl	GPIO_ResetBits
+ 148              	.LVL10:
+  98:USER/src/led.c **** 		break;
+ 149              		.loc 1 98 3 view .LVU28
+ 150              	.L5:
+  99:USER/src/led.c **** 	}
+ 100:USER/src/led.c **** }
+ 151              		.loc 1 100 1 is_stmt 0 view .LVU29
+ 152 0018 08BD     		pop	{r3, pc}
+ 153              	.LVL11:
+ 154              	.L6:
+  82:USER/src/led.c **** 				GPIO_SetBits(LED1_PORT,LED1_PIN);
+ 155              		.loc 1 82 4 is_stmt 1 view .LVU30
+  82:USER/src/led.c **** 				GPIO_SetBits(LED1_PORT,LED1_PIN);
+ 156              		.loc 1 82 6 is_stmt 0 view .LVU31
+ 157 001a 21B1     		cbz	r1, .L9
+  83:USER/src/led.c **** 			else 
+ 158              		.loc 1 83 5 is_stmt 1 view .LVU32
+ 159 001c 2021     		movs	r1, #32
+ 160              	.LVL12:
+  83:USER/src/led.c **** 			else 
+ 161              		.loc 1 83 5 is_stmt 0 view .LVU33
+ 162 001e 0A48     		ldr	r0, .L14
+ 163              	.LVL13:
+  83:USER/src/led.c **** 			else 
+ 164              		.loc 1 83 5 view .LVU34
+ 165 0020 FFF7FEFF 		bl	GPIO_SetBits
+ 166              	.LVL14:
+ 167 0024 F8E7     		b	.L5
+ 168              	.LVL15:
+ 169              	.L9:
+  85:USER/src/led.c **** 		break;
+ 170              		.loc 1 85 5 is_stmt 1 view .LVU35
+ 171 0026 2021     		movs	r1, #32
+ 172              	.LVL16:
+  85:USER/src/led.c **** 		break;
+ 173              		.loc 1 85 5 is_stmt 0 view .LVU36
+ 174 0028 0748     		ldr	r0, .L14
+ 175              	.LVL17:
+  85:USER/src/led.c **** 		break;
+ 176              		.loc 1 85 5 view .LVU37
+ 177 002a FFF7FEFF 		bl	GPIO_ResetBits
+ 178              	.LVL18:
+ 179 002e F3E7     		b	.L5
+ 180              	.LVL19:
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccYCCJRe.s 			page 6
+
+
+ 181              	.L7:
+  89:USER/src/led.c **** 				GPIO_SetBits(LED2_PORT,LED2_PIN);
+ 182              		.loc 1 89 4 is_stmt 1 view .LVU38
+  89:USER/src/led.c **** 				GPIO_SetBits(LED2_PORT,LED2_PIN);
+ 183              		.loc 1 89 6 is_stmt 0 view .LVU39
+ 184 0030 21B1     		cbz	r1, .L11
+  90:USER/src/led.c **** 			else
+ 185              		.loc 1 90 5 is_stmt 1 view .LVU40
+ 186 0032 2021     		movs	r1, #32
+ 187              	.LVL20:
+  90:USER/src/led.c **** 			else
+ 188              		.loc 1 90 5 is_stmt 0 view .LVU41
+ 189 0034 0548     		ldr	r0, .L14+4
+ 190              	.LVL21:
+  90:USER/src/led.c **** 			else
+ 191              		.loc 1 90 5 view .LVU42
+ 192 0036 FFF7FEFF 		bl	GPIO_SetBits
+ 193              	.LVL22:
+ 194 003a EDE7     		b	.L5
+ 195              	.LVL23:
+ 196              	.L11:
+  92:USER/src/led.c **** 		break;
+ 197              		.loc 1 92 5 is_stmt 1 view .LVU43
+ 198 003c 2021     		movs	r1, #32
+ 199              	.LVL24:
+  92:USER/src/led.c **** 		break;
+ 200              		.loc 1 92 5 is_stmt 0 view .LVU44
+ 201 003e 0348     		ldr	r0, .L14+4
+ 202              	.LVL25:
+  92:USER/src/led.c **** 		break;
+ 203              		.loc 1 92 5 view .LVU45
+ 204 0040 FFF7FEFF 		bl	GPIO_ResetBits
+ 205              	.LVL26:
+ 206 0044 E8E7     		b	.L5
+ 207              	.L15:
+ 208 0046 00BF     		.align	2
+ 209              	.L14:
+ 210 0048 000C0140 		.word	1073810432
+ 211 004c 00180140 		.word	1073813504
+ 212              		.cfi_endproc
+ 213              	.LFE30:
+ 215              		.text
+ 216              	.Letext0:
+ 217              		.file 2 "c:\\gnu arm embedded toolchain\\10 2020-q4-major\\arm-none-eabi\\include\\machine\\_defau
+ 218              		.file 3 "c:\\gnu arm embedded toolchain\\10 2020-q4-major\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 219              		.file 4 "CMSIS/DeviceSupport/stm32f10x.h"
+ 220              		.file 5 "STM32F10x_StdPeriph_Driver/inc/stm32f10x_gpio.h"
+ 221              		.file 6 "USER/inc/led.h"
+ 222              		.file 7 "STM32F10x_StdPeriph_Driver/inc/stm32f10x_rcc.h"
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccYCCJRe.s 			page 7
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 led.c
+C:\Users\Anoolv\AppData\Local\Temp\ccYCCJRe.s:16     .text.LED_Init:00000000 $t
+C:\Users\Anoolv\AppData\Local\Temp\ccYCCJRe.s:24     .text.LED_Init:00000000 LED_Init
+C:\Users\Anoolv\AppData\Local\Temp\ccYCCJRe.s:105    .text.LED_Init:0000005c $d
+C:\Users\Anoolv\AppData\Local\Temp\ccYCCJRe.s:111    .text.Led_Ctl:00000000 $t
+C:\Users\Anoolv\AppData\Local\Temp\ccYCCJRe.s:118    .text.Led_Ctl:00000000 Led_Ctl
+C:\Users\Anoolv\AppData\Local\Temp\ccYCCJRe.s:210    .text.Led_Ctl:00000048 $d
+
+UNDEFINED SYMBOLS
+RCC_APB2PeriphClockCmd
+GPIO_Init
+GPIO_SetBits
+GPIO_ResetBits

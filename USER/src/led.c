@@ -7,19 +7,19 @@
 *		   like GPIO Clock  Registersand so on.
 *
 ***/
-#ifdef RGT_OPT_FLAG				//æ˜¯å¦å®šä¹‰äº†å¯„å­˜å™¨æ“ä½œæ ‡å¿—ä½
+#ifdef RGT_OPT_FLAG				//ÊÇ·ñ¶¨ÒåÁË¼Ä´æÆ÷²Ù×÷±êÖ¾Î»
 void LED_Init(void)
 {
-	RCC->APB2ENR |= RCC_APB2ENR_IOPAEN | RCC_APB2ENR_IOPDEN ;
+	RCC->APB2ENR |= RCC_APB2ENR_IOPBEN | RCC_APB2ENR_IOPEEN ;
 
-	GPIOA->CRH &= ~(GPIO_CRH_CNF8 | GPIO_CRH_MODE8) ;
-	GPIOD->CRL &= ~(GPIO_CRL_CNF2 | GPIO_CRL_MODE2) ;
+	GPIOB->CRL &= ~(GPIO_CRL_CNF5 | GPIO_CRL_MODE5) ;
+	GPIOE->CRL &= ~(GPIO_CRL_CNF5 | GPIO_CRL_MODE5) ;
 
-	GPIOA->CRH |= (GPIO_CRH_MODE8) ;
-	GPIOD->CRL |= (GPIO_CRL_MODE2) ;
+	GPIOB->CRL |= (GPIO_CRL_MODE5) ;
+	GPIOE->CRL |= (GPIO_CRL_MODE5) ;
 
-	GPIOA->BSRR = LED1_PIN;
-	GPIOD->BSRR = LED2_PIN;
+	GPIOB->BSRR = LED1_PIN;
+	GPIOE->BSRR = LED2_PIN;
 }
 
 void Led_Ctl(LED_NUM num,BitAction status)
@@ -28,21 +28,21 @@ void Led_Ctl(LED_NUM num,BitAction status)
 	{
 		case LED_1:
 			if(status)
-				GPIOA->BSRR = LED1_PIN ;	
+				GPIOB->BSRR = LED1_PIN ;	
 			else 
-				GPIOA->BRR = LED1_PIN ;
+				GPIOB->BRR = LED1_PIN ;
 		break;
 
 		case LED_2:
 			if(status)
-				GPIOD->BSRR = LED2_PIN ;
+				GPIOE->BSRR = LED2_PIN ;
 			else
-				GPIOD->BRR = LED2_PIN ; 
+				GPIOE->BRR = LED2_PIN ; 
 		break;
 
 		default:
-			GPIOA->BSRR = LED1_PIN;
-			GPIOD->BSRR = LED2_PIN;
+			GPIOB->BSRR = LED1_PIN;
+			GPIOE->BSRR = LED2_PIN;
 		break;
 	}
 }

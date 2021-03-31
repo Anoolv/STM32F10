@@ -6,13 +6,13 @@
 
 #define RGT_OPT_FLAG		//寄存器操作标志位,使用寄存器操作就定义，使用库函数就注释掉
 
-#define LED1_PORT 			GPIOA   
-#define LED1_PIN 			GPIO_Pin_8
-#define LED1_PORT_RCC		RCC_APB2Periph_GPIOA
+#define LED1_PORT 			GPIOB   
+#define LED1_PIN 			GPIO_Pin_5 
+#define LED1_PORT_RCC		RCC_APB2Periph_GPIOB
 
-#define LED2_PORT 			GPIOD   
-#define LED2_PIN 			GPIO_Pin_2
-#define LED2_PORT_RCC		RCC_APB2Periph_GPIOD	
+#define LED2_PORT 			GPIOE   
+#define LED2_PIN 			GPIO_Pin_5
+#define LED2_PORT_RCC		RCC_APB2Periph_GPIOE	
 
 typedef enum
 {

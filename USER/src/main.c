@@ -1,5 +1,5 @@
 #include "stm32f10x.h"
-#include "stm32f10x_conf.h"
+//#include "stm32f10x_conf.h"
 #include "clock_config.h"
 #include "led.h"
 #include "usart.h"

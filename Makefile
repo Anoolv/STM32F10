@@ -65,26 +65,26 @@ CMSIS/DeviceSupport/system_stm32f10x.c \
 STM32F10x_StdPeriph_Driver/src/misc.c \
 STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.c \
 STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_adc.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_bkp.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_can.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_cec.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_dac.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_dbgmcu.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_exti.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_fsmc.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_i2c.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_iwdg.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_pwr.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_rtc.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_sdio.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_spi.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_tim.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.c \
-# STM32F10x_StdPeriph_Driver/src/stm32f10x_wwdg.c 
+STM32F10x_StdPeriph_Driver/src/stm32f10x_adc.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_bkp.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_can.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_cec.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_crc.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_dac.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_dbgmcu.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_exti.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_flash.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_fsmc.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_i2c.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_iwdg.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_pwr.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_rtc.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_sdio.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_spi.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_tim.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.c \
+STM32F10x_StdPeriph_Driver/src/stm32f10x_wwdg.c 
 ST_OBJS := $(ST_SRC:%.c=%.o)
 
 USR_SRC =  \
@@ -136,6 +136,6 @@ distclean: clean
 
 clean:
 	rm -f $(OBJS)
+	rm -f *.bin *.dis *.elf *.hex *.map
 
 .PHONY: all burn clean distclean
-

@@ -1,0 +1,567 @@
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s 			page 1
+
+
+   1              		.cpu cortex-m3
+   2              		.eabi_attribute 20, 1
+   3              		.eabi_attribute 21, 1
+   4              		.eabi_attribute 23, 3
+   5              		.eabi_attribute 24, 1
+   6              		.eabi_attribute 25, 1
+   7              		.eabi_attribute 26, 1
+   8              		.eabi_attribute 30, 1
+   9              		.eabi_attribute 34, 1
+  10              		.eabi_attribute 18, 4
+  11              		.file	"usart.c"
+  12              		.text
+  13              	.Ltext0:
+  14              		.cfi_sections	.debug_frame
+  15              		.section	.text.Usart1_InitCfg,"ax",%progbits
+  16              		.align	1
+  17              		.global	Usart1_InitCfg
+  18              		.arch armv7-m
+  19              		.syntax unified
+  20              		.thumb
+  21              		.thumb_func
+  22              		.fpu softvfp
+  24              	Usart1_InitCfg:
+  25              	.LVL0:
+  26              	.LFB32:
+  27              		.file 1 "USER/src/usart.c"
+   1:USER/src/usart.c **** /********************************************************************************
+   2:USER/src/usart.c ****   * @file    usart.c
+   3:USER/src/usart.c ****   * @author  Anoolv
+   4:USER/src/usart.c ****   * @version V1.0
+   5:USER/src/usart.c ****   * @date    2021-03
+   6:USER/src/usart.c ****   * @brief   usart初始化配置；重定向c库printf函数到 USART1 端口；
+   7:USER/src/usart.c ****   ******************************************************************************/
+   8:USER/src/usart.c **** #include "usart.h"
+   9:USER/src/usart.c **** 
+  10:USER/src/usart.c **** 
+  11:USER/src/usart.c **** /*****
+  12:USER/src/usart.c ****  * @function: usart1_Init(uint32_t bound)
+  13:USER/src/usart.c ****  * @brief  初始化USART1：1、使能串口和所使用的IO（PA9 PA10）的时钟，
+  14:USER/src/usart.c ****  *         2、设置IO为相应状态（工作模式、工作速率）；
+  15:USER/src/usart.c ****  *         3、配置波特率；
+  16:USER/src/usart.c ****  * @param  bound:波特率，USART1的时钟为PCLK2时钟频率(Mhz)   
+  17:USER/src/usart.c ****  * @retval 无
+  18:USER/src/usart.c ****  *****/ 
+  19:USER/src/usart.c **** void Usart1_InitCfg(uint32_t bound)
+  20:USER/src/usart.c **** {
+  28              		.loc 1 20 1 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 24
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		.loc 1 20 1 is_stmt 0 view .LVU1
+  33 0000 10B5     		push	{r4, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 4, -8
+  37              		.cfi_offset 14, -4
+  38 0002 86B0     		sub	sp, sp, #24
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s 			page 2
+
+
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 32
+  21:USER/src/usart.c ****   USART_InitTypeDef USART1_InitStruct ;
+  41              		.loc 1 21 3 is_stmt 1 view .LVU2
+  22:USER/src/usart.c ****   NVIC_InitTypeDef NVIC_InitStructure ;
+  42              		.loc 1 22 3 view .LVU3
+  23:USER/src/usart.c **** 
+  24:USER/src/usart.c ****   RCC->APB2ENR |= RCC_APB2ENR_IOPAEN | RCC_APB2ENR_USART1EN ; 
+  43              		.loc 1 24 3 view .LVU4
+  44              		.loc 1 24 16 is_stmt 0 view .LVU5
+  45 0004 1C4A     		ldr	r2, .L3
+  46 0006 9369     		ldr	r3, [r2, #24]
+  47 0008 43F48043 		orr	r3, r3, #16384
+  48 000c 43F00403 		orr	r3, r3, #4
+  49 0010 9361     		str	r3, [r2, #24]
+  25:USER/src/usart.c ****   GPIOA->CRH |= 0X000004B0;
+  50              		.loc 1 25 3 is_stmt 1 view .LVU6
+  51              		.loc 1 25 14 is_stmt 0 view .LVU7
+  52 0012 A2F58432 		sub	r2, r2, #67584
+  53 0016 5368     		ldr	r3, [r2, #4]
+  54 0018 43F49663 		orr	r3, r3, #1200
+  55 001c 5360     		str	r3, [r2, #4]
+  26:USER/src/usart.c **** 
+  27:USER/src/usart.c ****   USART1_InitStruct.USART_BaudRate = bound ;
+  56              		.loc 1 27 3 is_stmt 1 view .LVU8
+  57              		.loc 1 27 36 is_stmt 0 view .LVU9
+  58 001e 0290     		str	r0, [sp, #8]
+  28:USER/src/usart.c ****   USART1_InitStruct.USART_HardwareFlowControl =  USART_HardwareFlowControl_None ;
+  59              		.loc 1 28 3 is_stmt 1 view .LVU10
+  60              		.loc 1 28 47 is_stmt 0 view .LVU11
+  61 0020 0023     		movs	r3, #0
+  62 0022 ADF81430 		strh	r3, [sp, #20]	@ movhi
+  29:USER/src/usart.c ****   USART1_InitStruct.USART_Mode = USART_Mode_Rx | USART_Mode_Tx ;
+  63              		.loc 1 29 3 is_stmt 1 view .LVU12
+  64              		.loc 1 29 32 is_stmt 0 view .LVU13
+  65 0026 0C22     		movs	r2, #12
+  66 0028 ADF81220 		strh	r2, [sp, #18]	@ movhi
+  30:USER/src/usart.c ****   USART1_InitStruct.USART_Parity = USART_Parity_No ;
+  67              		.loc 1 30 3 is_stmt 1 view .LVU14
+  68              		.loc 1 30 34 is_stmt 0 view .LVU15
+  69 002c ADF81030 		strh	r3, [sp, #16]	@ movhi
+  31:USER/src/usart.c ****   USART1_InitStruct.USART_StopBits = USART_StopBits_1 ;
+  70              		.loc 1 31 3 is_stmt 1 view .LVU16
+  71              		.loc 1 31 36 is_stmt 0 view .LVU17
+  72 0030 ADF80E30 		strh	r3, [sp, #14]	@ movhi
+  32:USER/src/usart.c ****   USART1_InitStruct.USART_WordLength = USART_WordLength_8b ;
+  73              		.loc 1 32 3 is_stmt 1 view .LVU18
+  74              		.loc 1 32 38 is_stmt 0 view .LVU19
+  75 0034 ADF80C30 		strh	r3, [sp, #12]	@ movhi
+  33:USER/src/usart.c ****   USART_Init(USART1,&USART1_InitStruct) ;
+  76              		.loc 1 33 3 is_stmt 1 view .LVU20
+  77 0038 104C     		ldr	r4, .L3+4
+  78 003a 02A9     		add	r1, sp, #8
+  79 003c 2046     		mov	r0, r4
+  80              	.LVL1:
+  81              		.loc 1 33 3 is_stmt 0 view .LVU21
+  82 003e FFF7FEFF 		bl	USART_Init
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s 			page 3
+
+
+  83              	.LVL2:
+  34:USER/src/usart.c **** 
+  35:USER/src/usart.c ****   /* 嵌套向量中断控制器组选择 */
+  36:USER/src/usart.c ****   NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+  84              		.loc 1 36 3 is_stmt 1 view .LVU22
+  85 0042 4FF4A060 		mov	r0, #1280
+  86 0046 FFF7FEFF 		bl	NVIC_PriorityGroupConfig
+  87              	.LVL3:
+  37:USER/src/usart.c ****   /* 配置USART为中断源 */
+  38:USER/src/usart.c ****   NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;
+  88              		.loc 1 38 3 view .LVU23
+  89              		.loc 1 38 38 is_stmt 0 view .LVU24
+  90 004a 2523     		movs	r3, #37
+  91 004c 8DF80430 		strb	r3, [sp, #4]
+  39:USER/src/usart.c ****   /* 抢断优先级*/
+  40:USER/src/usart.c ****   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
+  92              		.loc 1 40 3 is_stmt 1 view .LVU25
+  93              		.loc 1 40 56 is_stmt 0 view .LVU26
+  94 0050 0123     		movs	r3, #1
+  95 0052 8DF80530 		strb	r3, [sp, #5]
+  41:USER/src/usart.c ****   /* 子优先级 */
+  42:USER/src/usart.c ****   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+  96              		.loc 1 42 3 is_stmt 1 view .LVU27
+  97              		.loc 1 42 49 is_stmt 0 view .LVU28
+  98 0056 8DF80630 		strb	r3, [sp, #6]
+  43:USER/src/usart.c ****   /* 使能中断 */
+  44:USER/src/usart.c ****   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  99              		.loc 1 44 3 is_stmt 1 view .LVU29
+ 100              		.loc 1 44 41 is_stmt 0 view .LVU30
+ 101 005a 8DF80730 		strb	r3, [sp, #7]
+  45:USER/src/usart.c ****   /* 初始化配置NVIC */
+  46:USER/src/usart.c ****   NVIC_Init(&NVIC_InitStructure);
+ 102              		.loc 1 46 3 is_stmt 1 view .LVU31
+ 103 005e 01A8     		add	r0, sp, #4
+ 104 0060 FFF7FEFF 		bl	NVIC_Init
+ 105              	.LVL4:
+  47:USER/src/usart.c **** 
+  48:USER/src/usart.c ****   USART1->CR1 |= 0X2020 ;
+ 106              		.loc 1 48 3 view .LVU32
+ 107              		.loc 1 48 15 is_stmt 0 view .LVU33
+ 108 0064 A389     		ldrh	r3, [r4, #12]
+ 109 0066 9BB2     		uxth	r3, r3
+ 110 0068 43F40053 		orr	r3, r3, #8192
+ 111 006c 43F02003 		orr	r3, r3, #32
+ 112 0070 A381     		strh	r3, [r4, #12]	@ movhi
+  49:USER/src/usart.c **** }
+ 113              		.loc 1 49 1 view .LVU34
+ 114 0072 06B0     		add	sp, sp, #24
+ 115              	.LCFI2:
+ 116              		.cfi_def_cfa_offset 8
+ 117              		@ sp needed
+ 118 0074 10BD     		pop	{r4, pc}
+ 119              	.L4:
+ 120 0076 00BF     		.align	2
+ 121              	.L3:
+ 122 0078 00100240 		.word	1073876992
+ 123 007c 00380140 		.word	1073821696
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s 			page 4
+
+
+ 124              		.cfi_endproc
+ 125              	.LFE32:
+ 127              		.section	.text.Usart_SendByte,"ax",%progbits
+ 128              		.align	1
+ 129              		.global	Usart_SendByte
+ 130              		.syntax unified
+ 131              		.thumb
+ 132              		.thumb_func
+ 133              		.fpu softvfp
+ 135              	Usart_SendByte:
+ 136              	.LVL5:
+ 137              	.LFB33:
+  50:USER/src/usart.c **** 
+  51:USER/src/usart.c **** /*****
+  52:USER/src/usart.c ****  * @function: UsartSendByte(USART_TypeDef* USARTx,uint8_t data)
+  53:USER/src/usart.c ****  * @brief  发送一个字节的数据
+  54:USER/src/usart.c ****  * @param  USARTx:USART1-USART5
+  55:USER/src/usart.c ****  *         data：发送的数据   
+  56:USER/src/usart.c ****  * @retval 无
+  57:USER/src/usart.c ****  *****/ 
+  58:USER/src/usart.c **** void Usart_SendByte(USART_TypeDef* USARTx, uint8_t data)
+  59:USER/src/usart.c **** {
+ 138              		.loc 1 59 1 is_stmt 1 view -0
+ 139              		.cfi_startproc
+ 140              		@ args = 0, pretend = 0, frame = 0
+ 141              		@ frame_needed = 0, uses_anonymous_args = 0
+ 142              		.loc 1 59 1 is_stmt 0 view .LVU36
+ 143 0000 10B5     		push	{r4, lr}
+ 144              	.LCFI3:
+ 145              		.cfi_def_cfa_offset 8
+ 146              		.cfi_offset 4, -8
+ 147              		.cfi_offset 14, -4
+ 148 0002 0446     		mov	r4, r0
+  60:USER/src/usart.c ****   while ( (USART1->SR & USART_FLAG_TXE) == RESET);
+ 149              		.loc 1 60 3 is_stmt 1 view .LVU37
+ 150              	.L6:
+ 151              		.loc 1 60 50 discriminator 1 view .LVU38
+ 152              		.loc 1 60 9 discriminator 1 view .LVU39
+ 153              		.loc 1 60 18 is_stmt 0 discriminator 1 view .LVU40
+ 154 0004 074B     		ldr	r3, .L9
+ 155 0006 1B88     		ldrh	r3, [r3]
+ 156              		.loc 1 60 9 discriminator 1 view .LVU41
+ 157 0008 13F0800F 		tst	r3, #128
+ 158 000c FAD0     		beq	.L6
+  61:USER/src/usart.c ****  // USART_SendData(USARTx,data);
+  62:USER/src/usart.c ****   USART1->DR = (data & 0x01FF);
+ 159              		.loc 1 62 3 is_stmt 1 view .LVU42
+ 160              		.loc 1 62 14 is_stmt 0 view .LVU43
+ 161 000e 89B2     		uxth	r1, r1
+ 162              	.LVL6:
+ 163              		.loc 1 62 14 view .LVU44
+ 164 0010 044B     		ldr	r3, .L9
+ 165 0012 9980     		strh	r1, [r3, #4]	@ movhi
+  63:USER/src/usart.c ****   while (USART_GetFlagStatus(USARTx, USART_FLAG_TC) == RESET);
+ 166              		.loc 1 63 3 is_stmt 1 view .LVU45
+ 167              	.LVL7:
+ 168              	.L7:
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s 			page 5
+
+
+ 169              		.loc 1 63 62 discriminator 1 view .LVU46
+ 170              		.loc 1 63 9 discriminator 1 view .LVU47
+ 171              		.loc 1 63 10 is_stmt 0 discriminator 1 view .LVU48
+ 172 0014 4021     		movs	r1, #64
+ 173 0016 2046     		mov	r0, r4
+ 174 0018 FFF7FEFF 		bl	USART_GetFlagStatus
+ 175              	.LVL8:
+ 176              		.loc 1 63 9 discriminator 1 view .LVU49
+ 177 001c 0028     		cmp	r0, #0
+ 178 001e F9D0     		beq	.L7
+  64:USER/src/usart.c **** }
+ 179              		.loc 1 64 1 view .LVU50
+ 180 0020 10BD     		pop	{r4, pc}
+ 181              	.LVL9:
+ 182              	.L10:
+ 183              		.loc 1 64 1 view .LVU51
+ 184 0022 00BF     		.align	2
+ 185              	.L9:
+ 186 0024 00380140 		.word	1073821696
+ 187              		.cfi_endproc
+ 188              	.LFE33:
+ 190              		.section	.text.Usart_SendHalfWord,"ax",%progbits
+ 191              		.align	1
+ 192              		.global	Usart_SendHalfWord
+ 193              		.syntax unified
+ 194              		.thumb
+ 195              		.thumb_func
+ 196              		.fpu softvfp
+ 198              	Usart_SendHalfWord:
+ 199              	.LVL10:
+ 200              	.LFB34:
+  65:USER/src/usart.c **** 
+  66:USER/src/usart.c **** /*****
+  67:USER/src/usart.c ****  * @function: UsartSendHalfWord(USART_TypeDef* USARTx, uint16_t data)
+  68:USER/src/usart.c ****  * @brief  发送两个字节的数据
+  69:USER/src/usart.c ****  * @param  USARTx:USART1-USART5
+  70:USER/src/usart.c ****  *         data：发送的数据   
+  71:USER/src/usart.c ****  * @retval 无
+  72:USER/src/usart.c ****  *****/ 
+  73:USER/src/usart.c **** void Usart_SendHalfWord(USART_TypeDef* USARTx, uint16_t data)
+  74:USER/src/usart.c **** {
+ 201              		.loc 1 74 1 is_stmt 1 view -0
+ 202              		.cfi_startproc
+ 203              		@ args = 0, pretend = 0, frame = 0
+ 204              		@ frame_needed = 0, uses_anonymous_args = 0
+ 205              		.loc 1 74 1 is_stmt 0 view .LVU53
+ 206 0000 38B5     		push	{r3, r4, r5, lr}
+ 207              	.LCFI4:
+ 208              		.cfi_def_cfa_offset 16
+ 209              		.cfi_offset 3, -16
+ 210              		.cfi_offset 4, -12
+ 211              		.cfi_offset 5, -8
+ 212              		.cfi_offset 14, -4
+ 213 0002 0446     		mov	r4, r0
+ 214 0004 0D46     		mov	r5, r1
+  75:USER/src/usart.c ****   uint8_t data_H, data_L ;
+ 215              		.loc 1 75 3 is_stmt 1 view .LVU54
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s 			page 6
+
+
+  76:USER/src/usart.c ****   data_H =(uint8_t) (data >> 8) ;
+ 216              		.loc 1 76 3 view .LVU55
+ 217              		.loc 1 76 11 is_stmt 0 view .LVU56
+ 218 0006 090A     		lsrs	r1, r1, #8
+ 219              	.LVL11:
+  77:USER/src/usart.c ****   data_L = (uint8_t) data;
+ 220              		.loc 1 77 3 is_stmt 1 view .LVU57
+  78:USER/src/usart.c **** 
+  79:USER/src/usart.c ****   while ( (USART1->SR & USART_FLAG_TXE) == RESET);
+ 221              		.loc 1 79 3 view .LVU58
+ 222              	.L12:
+ 223              		.loc 1 79 50 discriminator 1 view .LVU59
+ 224              		.loc 1 79 9 discriminator 1 view .LVU60
+ 225              		.loc 1 79 18 is_stmt 0 discriminator 1 view .LVU61
+ 226 0008 084B     		ldr	r3, .L15
+ 227 000a 1B88     		ldrh	r3, [r3]
+ 228              		.loc 1 79 9 discriminator 1 view .LVU62
+ 229 000c 13F0800F 		tst	r3, #128
+ 230 0010 FAD0     		beq	.L12
+  80:USER/src/usart.c ****   USART_SendData(USARTx,data_H);
+ 231              		.loc 1 80 3 is_stmt 1 view .LVU63
+ 232 0012 2046     		mov	r0, r4
+ 233              	.LVL12:
+ 234              		.loc 1 80 3 is_stmt 0 view .LVU64
+ 235 0014 FFF7FEFF 		bl	USART_SendData
+ 236              	.LVL13:
+  81:USER/src/usart.c ****   while ( (USART1->SR & USART_FLAG_TXE) == RESET);
+ 237              		.loc 1 81 3 is_stmt 1 view .LVU65
+ 238              	.L13:
+ 239              		.loc 1 81 50 discriminator 1 view .LVU66
+ 240              		.loc 1 81 9 discriminator 1 view .LVU67
+ 241              		.loc 1 81 18 is_stmt 0 discriminator 1 view .LVU68
+ 242 0018 044B     		ldr	r3, .L15
+ 243 001a 1B88     		ldrh	r3, [r3]
+ 244              		.loc 1 81 9 discriminator 1 view .LVU69
+ 245 001c 13F0800F 		tst	r3, #128
+ 246 0020 FAD0     		beq	.L13
+  82:USER/src/usart.c ****   USART_SendData(USARTx,data_L);
+ 247              		.loc 1 82 3 is_stmt 1 view .LVU70
+ 248 0022 E9B2     		uxtb	r1, r5
+ 249 0024 2046     		mov	r0, r4
+ 250 0026 FFF7FEFF 		bl	USART_SendData
+ 251              	.LVL14:
+  83:USER/src/usart.c **** }
+ 252              		.loc 1 83 1 is_stmt 0 view .LVU71
+ 253 002a 38BD     		pop	{r3, r4, r5, pc}
+ 254              	.LVL15:
+ 255              	.L16:
+ 256              		.loc 1 83 1 view .LVU72
+ 257              		.align	2
+ 258              	.L15:
+ 259 002c 00380140 		.word	1073821696
+ 260              		.cfi_endproc
+ 261              	.LFE34:
+ 263              		.section	.text.Usart_SendString,"ax",%progbits
+ 264              		.align	1
+ 265              		.global	Usart_SendString
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s 			page 7
+
+
+ 266              		.syntax unified
+ 267              		.thumb
+ 268              		.thumb_func
+ 269              		.fpu softvfp
+ 271              	Usart_SendString:
+ 272              	.LVL16:
+ 273              	.LFB35:
+  84:USER/src/usart.c **** 
+  85:USER/src/usart.c **** /*****
+  86:USER/src/usart.c ****  * @function:  UsartSendString(USART_TypeDef* USARTx, char* p_data)
+  87:USER/src/usart.c ****  * @brief  发送一个字符串
+  88:USER/src/usart.c ****  * @param  USARTx:USART1-USART5
+  89:USER/src/usart.c ****  *         data：发送的数据   
+  90:USER/src/usart.c ****  * @retval 无
+  91:USER/src/usart.c ****  *****/ 
+  92:USER/src/usart.c **** void Usart_SendString(USART_TypeDef* USARTx, char* p_data)
+  93:USER/src/usart.c **** {
+ 274              		.loc 1 93 1 is_stmt 1 view -0
+ 275              		.cfi_startproc
+ 276              		@ args = 0, pretend = 0, frame = 0
+ 277              		@ frame_needed = 0, uses_anonymous_args = 0
+ 278              		.loc 1 93 1 is_stmt 0 view .LVU74
+ 279 0000 70B5     		push	{r4, r5, r6, lr}
+ 280              	.LCFI5:
+ 281              		.cfi_def_cfa_offset 16
+ 282              		.cfi_offset 4, -16
+ 283              		.cfi_offset 5, -12
+ 284              		.cfi_offset 6, -8
+ 285              		.cfi_offset 14, -4
+ 286 0002 0646     		mov	r6, r0
+ 287 0004 0D46     		mov	r5, r1
+  94:USER/src/usart.c ****   unsigned int str_offset = 0 ;
+ 288              		.loc 1 94 3 is_stmt 1 view .LVU75
+ 289              	.LVL17:
+  95:USER/src/usart.c ****   char last_char = '\0' ;
+ 290              		.loc 1 95 3 view .LVU76
+  94:USER/src/usart.c ****   unsigned int str_offset = 0 ;
+ 291              		.loc 1 94 16 is_stmt 0 view .LVU77
+ 292 0006 0024     		movs	r4, #0
+ 293              	.LVL18:
+ 294              	.L18:
+  96:USER/src/usart.c ****   do
+  97:USER/src/usart.c ****   {
+  98:USER/src/usart.c ****     while ( (USART1->SR & USART_FLAG_TXE) == RESET);
+ 295              		.loc 1 98 52 is_stmt 1 discriminator 1 view .LVU78
+ 296              		.loc 1 98 11 discriminator 1 view .LVU79
+ 297              		.loc 1 98 20 is_stmt 0 discriminator 1 view .LVU80
+ 298 0008 094B     		ldr	r3, .L22
+ 299 000a 1B88     		ldrh	r3, [r3]
+ 300              		.loc 1 98 11 discriminator 1 view .LVU81
+ 301 000c 13F0800F 		tst	r3, #128
+ 302 0010 FAD0     		beq	.L18
+  99:USER/src/usart.c ****     USART_SendData(USARTx, *(p_data + str_offset));
+ 303              		.loc 1 99 5 is_stmt 1 view .LVU82
+ 304 0012 295D     		ldrb	r1, [r5, r4]	@ zero_extendqisi2
+ 305 0014 3046     		mov	r0, r6
+ 306 0016 FFF7FEFF 		bl	USART_SendData
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s 			page 8
+
+
+ 307              	.LVL19:
+ 100:USER/src/usart.c ****     str_offset ++ ;
+ 308              		.loc 1 100 5 view .LVU83
+ 309              		.loc 1 100 16 is_stmt 0 view .LVU84
+ 310 001a 0134     		adds	r4, r4, #1
+ 311              	.LVL20:
+ 101:USER/src/usart.c ****   } while (*(p_data + str_offset) != last_char) ;
+ 312              		.loc 1 101 11 is_stmt 1 view .LVU85
+ 313              		.loc 1 101 12 is_stmt 0 view .LVU86
+ 314 001c 2B5D     		ldrb	r3, [r5, r4]	@ zero_extendqisi2
+ 315              		.loc 1 101 3 view .LVU87
+ 316 001e 002B     		cmp	r3, #0
+ 317 0020 F2D1     		bne	.L18
+ 318              	.L20:
+ 102:USER/src/usart.c **** 
+ 103:USER/src/usart.c ****    while (USART_GetFlagStatus(USARTx, USART_FLAG_TC) == RESET);
+ 319              		.loc 1 103 63 is_stmt 1 discriminator 1 view .LVU88
+ 320              		.loc 1 103 10 discriminator 1 view .LVU89
+ 321              		.loc 1 103 11 is_stmt 0 discriminator 1 view .LVU90
+ 322 0022 4021     		movs	r1, #64
+ 323 0024 3046     		mov	r0, r6
+ 324 0026 FFF7FEFF 		bl	USART_GetFlagStatus
+ 325              	.LVL21:
+ 326              		.loc 1 103 10 discriminator 1 view .LVU91
+ 327 002a 0028     		cmp	r0, #0
+ 328 002c F9D0     		beq	.L20
+ 104:USER/src/usart.c ****   
+ 105:USER/src/usart.c **** }
+ 329              		.loc 1 105 1 view .LVU92
+ 330 002e 70BD     		pop	{r4, r5, r6, pc}
+ 331              	.LVL22:
+ 332              	.L23:
+ 333              		.loc 1 105 1 view .LVU93
+ 334              		.align	2
+ 335              	.L22:
+ 336 0030 00380140 		.word	1073821696
+ 337              		.cfi_endproc
+ 338              	.LFE35:
+ 340              		.section	.text.USART1_IRQHandler,"ax",%progbits
+ 341              		.align	1
+ 342              		.global	USART1_IRQHandler
+ 343              		.syntax unified
+ 344              		.thumb
+ 345              		.thumb_func
+ 346              		.fpu softvfp
+ 348              	USART1_IRQHandler:
+ 349              	.LFB36:
+ 106:USER/src/usart.c **** 
+ 107:USER/src/usart.c **** void USART1_IRQHandler(void)
+ 108:USER/src/usart.c **** {
+ 350              		.loc 1 108 1 is_stmt 1 view -0
+ 351              		.cfi_startproc
+ 352              		@ args = 0, pretend = 0, frame = 0
+ 353              		@ frame_needed = 0, uses_anonymous_args = 0
+ 354 0000 10B5     		push	{r4, lr}
+ 355              	.LCFI6:
+ 356              		.cfi_def_cfa_offset 8
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s 			page 9
+
+
+ 357              		.cfi_offset 4, -8
+ 358              		.cfi_offset 14, -4
+ 109:USER/src/usart.c ****   uint8_t res_data;
+ 359              		.loc 1 109 3 view .LVU95
+ 110:USER/src/usart.c ****   
+ 111:USER/src/usart.c ****   if(USART_GetITStatus(USART1,USART_IT_RXNE))
+ 360              		.loc 1 111 3 view .LVU96
+ 361              		.loc 1 111 6 is_stmt 0 view .LVU97
+ 362 0002 40F22551 		movw	r1, #1317
+ 363 0006 0748     		ldr	r0, .L28
+ 364 0008 FFF7FEFF 		bl	USART_GetITStatus
+ 365              	.LVL23:
+ 366              		.loc 1 111 5 view .LVU98
+ 367 000c 00B9     		cbnz	r0, .L27
+ 368              	.L24:
+ 112:USER/src/usart.c ****   {
+ 113:USER/src/usart.c ****     res_data = USART_ReceiveData(USART1);
+ 114:USER/src/usart.c ****     USART_SendData(USART1,(res_data & 0x01FF));
+ 115:USER/src/usart.c ****   }
+ 116:USER/src/usart.c **** }...
+ 369              		.loc 1 116 1 view .LVU99
+ 370 000e 10BD     		pop	{r4, pc}
+ 371              	.L27:
+ 113:USER/src/usart.c ****     res_data = USART_ReceiveData(USART1);
+ 372              		.loc 1 113 5 is_stmt 1 view .LVU100
+ 113:USER/src/usart.c ****     res_data = USART_ReceiveData(USART1);
+ 373              		.loc 1 113 16 is_stmt 0 view .LVU101
+ 374 0010 044C     		ldr	r4, .L28
+ 375 0012 2046     		mov	r0, r4
+ 376 0014 FFF7FEFF 		bl	USART_ReceiveData
+ 377              	.LVL24:
+ 114:USER/src/usart.c ****     USART_SendData(USART1,(res_data & 0x01FF));
+ 378              		.loc 1 114 5 is_stmt 1 view .LVU102
+ 379 0018 C1B2     		uxtb	r1, r0
+ 380 001a 2046     		mov	r0, r4
+ 381              	.LVL25:
+ 114:USER/src/usart.c ****     USART_SendData(USART1,(res_data & 0x01FF));
+ 382              		.loc 1 114 5 is_stmt 0 view .LVU103
+ 383 001c FFF7FEFF 		bl	USART_SendData
+ 384              	.LVL26:
+ 385              		.loc 1 116 1 view .LVU104
+ 386 0020 F5E7     		b	.L24
+ 387              	.L29:
+ 388 0022 00BF     		.align	2
+ 389              	.L28:
+ 390 0024 00380140 		.word	1073821696
+ 391              		.cfi_endproc
+ 392              	.LFE36:
+ 394              		.text
+ 395              	.Letext0:
+ 396              		.file 2 "c:\\gnu arm embedded toolchain\\10 2020-q4-major\\arm-none-eabi\\include\\machine\\_defau
+ 397              		.file 3 "c:\\gnu arm embedded toolchain\\10 2020-q4-major\\arm-none-eabi\\include\\sys\\_stdint.h"
+ 398              		.file 4 "CMSIS/DeviceSupport/stm32f10x.h"
+ 399              		.file 5 "STM32F10x_StdPeriph_Driver/inc/stm32f10x_usart.h"
+ 400              		.file 6 "STM32F10x_StdPeriph_Driver/inc/misc.h"
+ARM GAS  C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s 			page 10
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 usart.c
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:16     .text.Usart1_InitCfg:00000000 $t
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:24     .text.Usart1_InitCfg:00000000 Usart1_InitCfg
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:122    .text.Usart1_InitCfg:00000078 $d
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:128    .text.Usart_SendByte:00000000 $t
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:135    .text.Usart_SendByte:00000000 Usart_SendByte
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:186    .text.Usart_SendByte:00000024 $d
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:191    .text.Usart_SendHalfWord:00000000 $t
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:198    .text.Usart_SendHalfWord:00000000 Usart_SendHalfWord
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:259    .text.Usart_SendHalfWord:0000002c $d
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:264    .text.Usart_SendString:00000000 $t
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:271    .text.Usart_SendString:00000000 Usart_SendString
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:336    .text.Usart_SendString:00000030 $d
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:341    .text.USART1_IRQHandler:00000000 $t
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:348    .text.USART1_IRQHandler:00000000 USART1_IRQHandler
+C:\Users\Anoolv\AppData\Local\Temp\ccJSOslq.s:390    .text.USART1_IRQHandler:00000024 $d
+
+UNDEFINED SYMBOLS
+USART_Init
+NVIC_PriorityGroupConfig
+NVIC_Init
+USART_GetFlagStatus
+USART_SendData
+USART_GetITStatus
+USART_ReceiveData

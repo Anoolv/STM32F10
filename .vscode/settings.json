@@ -1,6 +1,33 @@
 {
-    "files.associations": {
-        "stm32f10x.h": "c",
-        "stm32f10x_gpio.h": "c"
-    }
+    "EIDE.ARM.GCC.InstallDirectory": "d:\\GNU Arm Embedded Toolchain\\10 2020-q4-major",
+    "EIDE.ARM.OpenOCD.ExePath": "D:\\openocd-0.10.0\\bin\\openocd.exe",
+    "EIDE.ARM.INI.Path": "D:\\Keil_v5\\TOOLS.INI",
+    "EIDE.ARM.StlinkExePath": "C:\\Program Files (x86)\\STMicroelectronics\\ST-LINK Utility\\STM32 ST-LINK Utility.exe",
+    "cortex-debug.armToolchainPrefix": "arm-none-eabi",
+    "cortex-debug.stm32cubeprogrammer": "D:\\STM32Cube\\STM32CubeProgrammer\\bin\\STM32CubeProgrammer.exe",
+    "cortex-debug.stlinkPath": "C:\\Program Files (x86)\\STMicroelectronics\\stlink_server\\stlink_server.exe",
+    "EIDE.C51.INI.Path": "d:\\Keil_v5\\TOOLS.INI",
+    "EIDE.IAR.STM8.InstallDirectory": "d:\\IAR\\78k\\bin",
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.productIconTheme": "material-product-icons",
+    "files.autoSave": "afterDelay",
+    "workbench.colorTheme": "Rainbow Syntax Highlighter",
+    "editor.cursorBlinking": "smooth",
+    "editor.cursorSmoothCaretAnimation": true,
+    "editor.cursorStyle": "block",
+    "editor.cursorWidth": 1,
+    "gitlens.advanced.messages": {
+        "suppressGitMissingWarning": true
+    },
+    "workbench.colorCustomizations": {
+        "editor.selectionBackground": "#f2f7f4",
+        "editor.selectionHighlightBackground": "#a8f8ebd7"
+        },
+    "files.encoding": "gb2312",
+    "C_Cpp.updateChannel": "Insiders",
+    "terminal.integrated.automationShell.windows": "C:/msys64/msys2.exe",
+    "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
+    "C_Cpp.default.intelliSenseMode": "gcc-arm",
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "terminal.integrated.automationShell.linux": "",
 }
